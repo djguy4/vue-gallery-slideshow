@@ -25,12 +25,16 @@
         class="vgs__container"
         @click.stop="onNext"
       >
-        <img
-          class="vgs__container__img"
-          :src="imageUrl"
-          :alt="alt"
-          @click.stop="onNext"
-        >
+        <picture>
+          <source :srcset="imageUrl" type="image/webp" />
+          <source :srcset="getFallbackImage(imageUrl)" type="image/jpeg" />
+          <img
+            class="vgs__container__img"
+            :src="getFallbackImage(imageUrl)"
+            :alt="alt"
+            @click.stop="onNext"
+          />
+        </picture>
         <slot></slot>
       </div>
       <button
@@ -197,7 +201,14 @@ export default {
       } else {
         this.galleryXPos = -(this.imgIndex * this.thumbnailWidth) + centerPos;
       }
-    }
+    },
+    getFallbackImage(imageUrl) {
+      if (imageUrl) {
+        return imageUrl.replace('.webp', '');
+      } else {
+        return imageUrl;
+      }
+    },
   }
 };
 </script>
